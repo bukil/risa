@@ -10,7 +10,7 @@ const ResultCard = ({ item, onPin }) => {
     };
 
     return (
-        <div className="frosted-glass card-surface" style={{
+        <div className="frosted-glass card-surface light-panel" style={{
             padding: '16px',
             display: 'flex',
             flexDirection: 'column',

@@ -5,7 +5,7 @@ const Insights = () => {
     return (
         <div style={{ display: 'flex', height: '100%' }}>
             {/* Document Area */}
-            <div style={{
+            <div className="light-panel" style={{
                 flex: 1,
                 padding: 'var(--space-xl)',
                 overflowY: 'auto',

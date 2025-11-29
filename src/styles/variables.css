@@ -1,38 +1,50 @@
 :root {
-  /* Colors - Soft Acrylic Theme (ARC Inspired) */
+  /* Colors - Dark/Grey Monochrome Theme (Default) */
   /* Backgrounds */
-  --bg-app: 240 20% 98%;
-  /* Soft White/Grey */
-  --bg-sidebar: 240 20% 96%;
-  /* Very Light Grey */
-  --bg-surface: 0 0% 100%;
-  /* Pure White */
-  --bg-acrylic: 240 20% 98%;
-  /* Translucent base */
+  --bg-app: 0 0% 5%;
+  /* #0d0d0d */
+  --bg-sidebar: 0 0% 7%;
+  /* #121212 */
+  --bg-surface: 0 0% 10%;
+  /* #1a1a1a */
+  --bg-acrylic: 0 0% 7%;
 
-  /* Accents (Pastel Space) */
-  --primary: 250 80% 65%;
-  /* Soft Purple/Periwinkle */
-  --primary-soft: 250 80% 92%;
-  /* Light Periwinkle Background */
-  --secondary: 170 70% 45%;
-  /* Muted Teal/Mint */
-  --accent: 10 80% 65%;
-  /* Soft Coral */
+  /* Accents (Monochrome/Desaturated) */
+  --primary: 0 0% 60%;
+  --primary-soft: 0 0% 20%;
+  --secondary: 0 0% 50%;
+  --accent: 0 0% 50%;
 
-  /* ARC Gradients */
-  --gradient-aurora: linear-gradient(135deg, hsla(250, 80%, 75%, 0.2), hsla(170, 70%, 65%, 0.2));
-  --gradient-sunset: linear-gradient(135deg, hsla(10, 80%, 75%, 0.2), hsla(40, 80%, 75%, 0.2));
-  --gradient-ocean: linear-gradient(135deg, hsla(200, 80%, 75%, 0.2), hsla(170, 70%, 65%, 0.2));
-  --gradient-glass: linear-gradient(180deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.3) 100%);
+  /* Gradients - Subtle Gray/Monochrome */
+  --gradient-aurora: linear-gradient(135deg, #333 0%, #555 100%);
+  --gradient-sunset: linear-gradient(135deg, #333 0%, #555 100%);
+  --gradient-ocean: linear-gradient(135deg, #333 0%, #555 100%);
+  --gradient-glass: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+
+  --gradient-gemini: linear-gradient(135deg, #333 0%, #555 100%);
+  --gradient-gpt: linear-gradient(135deg, #333 0%, #555 100%);
+  --gradient-claude: linear-gradient(135deg, #333 0%, #555 100%);
+  --gradient-primary: linear-gradient(135deg, #444 0%, #666 100%);
+  --gradient-glow: conic-gradient(from 180deg at 50% 50%, #333 0deg, #444 180deg, #333 360deg);
+
+  /* Global Background - Subtle Noise/Gradient */
+  --bg-gradient-main:
+    radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 100% 100%, rgba(255, 255, 255, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 100% 0%, rgba(255, 255, 255, 0.04) 0%, transparent 50%);
 
   /* Text */
-  --text-main: 240 20% 20%;
-  /* Soft Black */
-  --text-muted: 240 10% 50%;
-  /* Grey */
-  --text-dim: 240 10% 70%;
-  /* Light Grey */
+  --text-main: 0 0% 90%;
+  /* #e5e5e5 */
+  --text-muted: 0 0% 60%;
+  /* #999999 */
+  --text-dim: 0 0% 40%;
+
+  /* Icon Colors */
+  --icon-color: #a1a1aa;
+  --color-web: var(--icon-color);
+  --color-code: var(--icon-color);
+  --color-file: var(--icon-color);
 
   /* Status */
   --success: 150 60% 45%;
@@ -48,74 +60,53 @@
 
   /* Borders & Radius - iOS Style */
   --radius-sm: 10px;
-  /* Small elements */
   --radius-md: 16px;
-  /* Cards/Containers */
   --radius-lg: 24px;
-  /* Large Panels */
   --radius-xl: 32px;
-  /* Modals/Floating */
   --radius-full: 9999px;
 
-  --border-subtle: 240 10% 90%;
-  --border-light: 240 10% 85%;
+  --border-subtle: 0 0% 20%;
+  --border-light: 0 0% 25%;
 
   /* Textures */
   --noise-pattern: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
 
-  /* Shadows - Apple HIG (Diffuse & Layered) */
-  --shadow-sm:
-    0 1px 2px rgba(0, 0, 0, 0.04),
-    0 2px 4px rgba(0, 0, 0, 0.04);
-  --shadow-md:
-    0 4px 8px rgba(0, 0, 0, 0.04),
-    0 12px 24px rgba(0, 0, 0, 0.06);
-  --shadow-lg:
-    0 12px 24px rgba(0, 0, 0, 0.04),
-    0 32px 64px rgba(0, 0, 0, 0.08);
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.6);
 }
 
-/* Dark Mode Override (Optional, can be toggled via class) */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg-app: 240 10% 10%;
-    --bg-sidebar: 240 10% 12%;
-    /* Premium Gradients */
-    --gradient-gemini: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-    --gradient-gpt: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-    --gradient-claude: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    --gradient-glow: conic-gradient(from 180deg at 50% 50%, #b2a8fd 0deg, #8678f9 180deg, #c7d2fe 360deg);
+/* Light Mode Override (Optional) */
+[data-theme='light'] {
+  --bg-app: 240 20% 98%;
+  --bg-sidebar: 240 20% 96%;
+  --bg-surface: 0 0% 100%;
+  --bg-acrylic: 240 20% 98%;
 
-    /* Icon Colors */
-    --color-web: #3b82f6;
-    --color-code: #8b5cf6;
-    --color-file: #f59e0b;
+  --primary: 250 80% 65%;
+  --primary-soft: 250 80% 92%;
+  --secondary: 170 70% 45%;
+  --accent: 10 80% 65%;
 
-    --bg-surface: 240 10% 16%;
-    --bg-acrylic: 240 10% 12%;
+  --gradient-aurora: linear-gradient(135deg, hsla(250, 80%, 75%, 0.2), hsla(170, 70%, 65%, 0.2));
+  --gradient-sunset: linear-gradient(135deg, hsla(10, 80%, 75%, 0.2), hsla(40, 80%, 75%, 0.2));
+  --gradient-ocean: linear-gradient(135deg, hsla(200, 80%, 75%, 0.2), hsla(170, 70%, 65%, 0.2));
+  --gradient-glass: linear-gradient(180deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.3) 100%);
 
-    --text-main: 240 10% 95%;
-    --text-muted: 240 10% 70%;
+  --bg-gradient-main: none;
 
-    --border-subtle: 240 10% 20%;
-    --border-light: 240 10% 25%;
+  --text-main: 240 20% 20%;
+  --text-muted: 240 10% 50%;
+  --text-dim: 240 10% 70%;
 
-    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
-    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.3);
-  }
-}
+  --icon-color: inherit;
+  /* Reset to default colors */
 
-[data-theme='dark'] {
-  --bg-app: #0f0f12;
-  --bg-surface: #1c1c1e;
-  --text-main: #ffffff;
-  --text-muted: #a1a1aa;
-  --border-subtle: rgba(255, 255, 255, 0.1);
+  --border-subtle: 240 10% 90%;
+  --border-light: 240 10% 85%;
 
-  --primary: 250 100% 70%;
-  --primary-soft: 250 100% 70%;
-
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
-  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04), 0 2px 4px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.04), 0 12px 24px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.04), 0 32px 64px rgba(0, 0, 0, 0.08);
 }

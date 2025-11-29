@@ -3,7 +3,7 @@ import { BarChart3, Users, Zap, ArrowUpRight } from 'lucide-react';
 import { useWorkflow } from '../context/WorkflowContext';
 
 const MetricCard = ({ icon: Icon, label, value, trend, color }) => (
-    <div className="frosted-glass card-surface" style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+    <div className="frosted-glass card-surface light-panel" style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
             <div style={{ padding: '10px', borderRadius: '12px', background: `hsla(${color}, 0.1)` }}>
                 <Icon size={20} color={`hsl(${color})`} />
@@ -54,7 +54,7 @@ const Analytics = () => {
             {/* Visualizations */}
             <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '20px' }}>
                 {/* Main Chart */}
-                <div className="frosted-glass card-surface" style={{ padding: '24px', height: '400px' }}>
+                <div className="frosted-glass card-surface light-panel" style={{ padding: '24px', height: '400px' }}>
                     <h3 style={{ fontSize: '1.1rem', fontWeight: 600, marginBottom: '20px' }}>Exploration Depth (Topic Branching)</h3>
                     {/* CSS-only Tree Chart Mockup */}
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px', height: '100%', justifyContent: 'center' }}>
@@ -81,7 +81,7 @@ const Analytics = () => {
                 </div>
 
                 {/* Side Stats */}
-                <div className="frosted-glass card-surface" style={{ padding: '24px' }}>
+                <div className="frosted-glass card-surface light-panel" style={{ padding: '24px' }}>
                     <h3 style={{ fontSize: '1.1rem', fontWeight: 600, marginBottom: '20px' }}>Source Diversity</h3>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                         {[

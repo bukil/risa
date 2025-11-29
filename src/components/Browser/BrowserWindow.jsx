@@ -75,7 +75,7 @@ const BrowserWindow = () => {
 
                 {/* Mock Web Page Content (SaaS Dashboard) */}
                 <div style={{ flex: 1, padding: 'var(--space-xl)', overflowY: 'auto' }}>
-                    <div style={{
+                    <div className="light-panel" style={{
                         background: 'white',
                         borderRadius: '8px',
                         minHeight: '100%',
@@ -94,14 +94,14 @@ const BrowserWindow = () => {
                         <div style={{ display: 'flex', gap: '20px' }}>
                             {['To Do', 'In Progress', 'Done'].map(col => (
                                 <div key={col} style={{ flex: 1, background: '#f4f5f7', padding: '16px', borderRadius: '6px' }}>
-                                    <h3 style={{ fontSize: '14px', fontWeight: '600', marginBottom: '16px', color: '#5e6c84' }}>{col}</h3>
-                                    <div style={{ background: 'white', padding: '12px', borderRadius: '4px', boxShadow: '0 1px 2px rgba(0,0,0,0.1)', marginBottom: '10px' }}>
-                                        <div style={{ fontSize: '14px', marginBottom: '8px' }}>Research Competitor Pricing</div>
-                                        <div style={{ fontSize: '11px', color: '#888' }}>PROJ-101 • Medium</div>
+                                    <h3 style={{ fontSize: '14px', fontWeight: '600', marginBottom: '16px', color: 'hsl(var(--text-muted))' }}>{col}</h3>
+                                    <div style={{ background: 'hsl(var(--bg-surface))', padding: '12px', borderRadius: '8px', marginBottom: '8px', boxShadow: 'var(--shadow-sm)', border: '1px solid hsla(var(--border-subtle))' }}>
+                                        <div style={{ fontSize: '13px', fontWeight: '500', marginBottom: '4px' }}>Update Documentation</div>
+                                        <div style={{ fontSize: '11px', color: 'hsl(var(--text-dim))' }}>PROJ-101 • Medium</div>
                                     </div>
-                                    <div style={{ background: 'white', padding: '12px', borderRadius: '4px', boxShadow: '0 1px 2px rgba(0,0,0,0.1)', marginBottom: '10px' }}>
-                                        <div style={{ fontSize: '14px', marginBottom: '8px' }}>Update User Documentation</div>
-                                        <div style={{ fontSize: '11px', color: '#888' }}>PROJ-102 • Low</div>
+                                    <div style={{ background: 'hsl(var(--bg-surface))', padding: '12px', borderRadius: '8px', marginBottom: '8px', boxShadow: 'var(--shadow-sm)', border: '1px solid hsla(var(--border-subtle))' }}>
+                                        <div style={{ fontSize: '13px', fontWeight: '500', marginBottom: '4px' }}>Fix Navigation Bug</div>
+                                        <div style={{ fontSize: '11px', color: 'hsl(var(--text-dim))' }}>PROJ-102 • Low</div>
                                     </div>
                                 </div>
                             ))}

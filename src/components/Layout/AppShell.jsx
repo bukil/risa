@@ -15,6 +15,7 @@ const NavItem = ({ item, isActive, onClick }) => {
         >
             <button
                 onClick={onClick}
+                className={isActive ? 'light-panel' : ''}
                 style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -22,8 +23,8 @@ const NavItem = ({ item, isActive, onClick }) => {
                     padding: '10px 16px',
                     borderRadius: 'var(--radius-md)',
                     border: 'none',
-                    background: isActive ? 'var(--gradient-aurora)' : 'transparent',
-                    color: isActive ? 'hsl(var(--primary))' : 'hsl(var(--text-muted))',
+                    background: isActive ? 'hsl(0, 0%, 90%)' : 'transparent', // Light grey for active
+                    color: isActive ? '#000000' : 'hsl(var(--text-muted))', // Black text for active
                     cursor: 'pointer',
                     transition: 'all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1)',
                     textAlign: 'left',
@@ -47,20 +48,20 @@ const NavItem = ({ item, isActive, onClick }) => {
                     left: '100%',
                     top: '50%',
                     transform: 'translateY(-50%) translateX(12px)',
-                    background: 'hsla(var(--bg-surface), 0.9)',
-                    backdropFilter: 'blur(12px)',
+                    background: 'rgba(255, 255, 255, 0.6)', // Light frosted glass
+                    backdropFilter: 'blur(16px) saturate(180%)',
                     padding: '12px',
                     borderRadius: 'var(--radius-md)',
-                    boxShadow: 'var(--shadow-md)',
+                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
                     width: '180px',
                     zIndex: 50,
-                    border: '1px solid hsla(var(--border-subtle))',
+                    border: '1px solid rgba(255, 255, 255, 0.3)',
                     animation: 'fadeIn 0.2s ease-out'
                 }}>
-                    <div style={{ fontSize: '0.8rem', fontWeight: 600, marginBottom: '4px', color: 'hsl(var(--text-main))' }}>
+                    <div style={{ fontSize: '0.8rem', fontWeight: 600, marginBottom: '4px', color: '#000' }}> {/* Dark text */}
                         {item.label}
                     </div>
-                    <div style={{ fontSize: '0.75rem', color: 'hsl(var(--text-muted))', lineHeight: '1.4' }}>
+                    <div style={{ fontSize: '0.75rem', color: '#333', lineHeight: '1.4' }}> {/* Dark text */}
                         {item.detail}
                     </div>
                     {/* Arrow */}
@@ -71,9 +72,10 @@ const NavItem = ({ item, isActive, onClick }) => {
                         transform: 'translateY(-50%) rotate(45deg)',
                         width: '12px',
                         height: '12px',
-                        background: 'hsla(var(--bg-surface), 0.9)',
-                        borderLeft: '1px solid hsla(var(--border-subtle))',
-                        borderBottom: '1px solid hsla(var(--border-subtle))',
+                        background: 'rgba(255, 255, 255, 0.6)',
+                        backdropFilter: 'blur(16px)',
+                        borderLeft: '1px solid rgba(255, 255, 255, 0.3)',
+                        borderBottom: '1px solid rgba(255, 255, 255, 0.3)',
                     }} />
                 </div>
             )}
@@ -81,6 +83,7 @@ const NavItem = ({ item, isActive, onClick }) => {
     );
 };
 
+import HighlightOverlay from '../Overlay/HighlightOverlay';
 import TaskSimulator from '../Agent/TaskSimulator';
 
 const AppShell = ({ activeTab, onTabChange, children }) => {
@@ -88,6 +91,39 @@ const AppShell = ({ activeTab, onTabChange, children }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [agentPrompt, setAgentPrompt] = useState('');
     const [isAgentActive, setIsAgentActive] = useState(false);
+
+    // AI Explanation State
+    const [isExplaining, setIsExplaining] = useState(false);
+    const [explanationStep, setExplanationStep] = useState(0);
+
+    const explanationSteps = [
+        {
+            targetId: 'agent-panel',
+            explanation: `I've analyzed your request "${agentPrompt}" using the selected model. The agent has processed multiple data sources to generate these findings.`
+        },
+        {
+            targetId: 'main-content',
+            explanation: "Based on the analysis, I've curated these search results and insights. You can explore each item for more detailed information."
+        },
+        {
+            targetId: 'sidebar-nav',
+            explanation: "You can use the navigation to switch between different views like Canvas or Insights to further organize this research."
+        }
+    ];
+
+    const handleTaskComplete = () => {
+        setIsExplaining(true);
+        setExplanationStep(0);
+    };
+
+    const handleNextExplanation = () => {
+        if (explanationStep < explanationSteps.length - 1) {
+            setExplanationStep(prev => prev + 1);
+        } else {
+            setIsExplaining(false);
+            setExplanationStep(0);
+        }
+    };
 
     const handleSearch = (e) => {
         e.preventDefault();
@@ -108,8 +144,17 @@ const AppShell = ({ activeTab, onTabChange, children }) => {
     return (
         <div className="noise-bg" style={{ display: 'flex', height: '100vh', width: '100vw', overflow: 'hidden' }}>
 
+            {isExplaining && (
+                <HighlightOverlay
+                    targetId={explanationSteps[explanationStep].targetId}
+                    explanation={explanationSteps[explanationStep].explanation}
+                    onNext={handleNextExplanation}
+                    isLastStep={explanationStep === explanationSteps.length - 1}
+                />
+            )}
+
             {/* 1. Left Sidebar (Navigation & Spaces) */}
-            <aside className="acrylic-sidebar" style={{
+            <aside id="sidebar-nav" className="acrylic-sidebar" style={{
                 width: '260px',
                 display: 'flex',
                 flexDirection: 'column',
@@ -167,7 +212,7 @@ const AppShell = ({ activeTab, onTabChange, children }) => {
             </aside>
 
             {/* 2. Main Content Area */}
-            <main style={{
+            <main id="main-content" style={{
                 flex: 1,
                 position: 'relative',
                 overflow: 'hidden',
@@ -244,7 +289,7 @@ const AppShell = ({ activeTab, onTabChange, children }) => {
             </main>
 
             {/* 3. Right Panel (Agent/Inspector) */}
-            <aside style={{
+            <aside id="agent-panel" style={{
                 width: isRightPanelOpen ? '320px' : '0px',
                 transition: 'width 0.3s cubic-bezier(0.2, 0.8, 0.2, 1)',
                 borderLeft: '1px solid hsla(var(--border-subtle))',
@@ -256,17 +301,11 @@ const AppShell = ({ activeTab, onTabChange, children }) => {
                 zIndex: 20
             }}>
                 <div style={{ flex: 1, padding: 'var(--space-md)', overflow: 'hidden' }}>
-                    {isAgentActive ? (
-                        <TaskSimulator prompt={agentPrompt} isActive={isAgentActive} />
-                    ) : (
-                        <div style={{
-                            height: '100%', display: 'flex', flexDirection: 'column',
-                            alignItems: 'center', justifyContent: 'center', opacity: 0.5
-                        }}>
-                            <Sparkles size={48} strokeWidth={1} />
-                            <p style={{ marginTop: '16px', fontSize: '0.9rem' }}>Agent is idle</p>
-                        </div>
-                    )}
+                    <TaskSimulator
+                        prompt={agentPrompt}
+                        isActive={isAgentActive}
+                        onTaskComplete={handleTaskComplete}
+                    />
                 </div>
             </aside>
 
