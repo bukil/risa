@@ -30,7 +30,6 @@ const NavItem = ({ item, isActive, onClick }) => {
                     fontSize: '0.9rem',
                     fontWeight: isActive ? 600 : 400,
                     width: '100%',
-                    boxShadow: isActive ? '0 2px 8px rgba(0,0,0,0.08)' : 'none',
                     boxShadow: isActive ? 'var(--shadow-sm)' : 'none',
                     position: 'relative',
                     zIndex: 2
