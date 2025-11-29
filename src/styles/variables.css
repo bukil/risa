@@ -40,14 +40,22 @@
   --space-lg: 2rem;
   --space-xl: 3rem;
 
-  /* Borders & Radius - Soft & Round */
-  --radius-sm: 8px;
+  /* Borders & Radius - iOS Style */
+  --radius-sm: 10px;
+  /* Small elements */
   --radius-md: 16px;
+  /* Cards/Containers */
   --radius-lg: 24px;
+  /* Large Panels */
+  --radius-xl: 32px;
+  /* Modals/Floating */
   --radius-full: 9999px;
 
   --border-subtle: 240 10% 90%;
   --border-light: 240 10% 85%;
+
+  /* Textures */
+  --noise-pattern: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
 
   /* Shadows - Diffuse */
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
