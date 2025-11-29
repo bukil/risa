@@ -4,7 +4,7 @@ import { useWorkflow } from '../../context/WorkflowContext';
 
 const CanvasCard = ({ item, x, y, onDraft }) => {
     return (
-        <div className="frosted-glass card-surface" style={{
+        <div className="frosted-glass card-surface light-panel" style={{
             position: 'absolute',
             left: x, top: y,
             width: '280px',
