@@ -22,20 +22,22 @@ const NavItem = ({ item, isActive, onClick }) => {
                     padding: '10px 16px',
                     borderRadius: 'var(--radius-md)',
                     border: 'none',
-                    background: isActive ? 'white' : 'transparent',
+                    background: isActive ? 'var(--gradient-aurora)' : 'transparent',
                     color: isActive ? 'hsl(var(--primary))' : 'hsl(var(--text-muted))',
                     cursor: 'pointer',
                     transition: 'all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1)',
                     textAlign: 'left',
                     fontSize: '0.9rem',
-                    fontWeight: isActive ? 600 : 500,
+                    fontWeight: isActive ? 600 : 400,
                     width: '100%',
                     boxShadow: isActive ? '0 2px 8px rgba(0,0,0,0.08)' : 'none',
+                    boxShadow: isActive ? 'var(--shadow-sm)' : 'none',
                     position: 'relative',
                     zIndex: 2
                 }}
             >
-                <item.icon size={18} strokeWidth={isActive ? 2.5 : 2} />
+                {/* Icon Weight Transition: 2px (Regular) -> 2.5px/3px (Active/Bold) */}
+                <item.icon size={20} strokeWidth={isActive ? 2.5 : 1.75} style={{ transition: 'stroke-width 0.2s ease' }} />
                 {item.label}
             </button>
 
@@ -80,8 +82,22 @@ const NavItem = ({ item, isActive, onClick }) => {
     );
 };
 
+import TaskSimulator from '../Agent/TaskSimulator';
+
 const AppShell = ({ activeTab, onTabChange, children }) => {
     const [isRightPanelOpen, setIsRightPanelOpen] = useState(true);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [agentPrompt, setAgentPrompt] = useState('');
+    const [isAgentActive, setIsAgentActive] = useState(false);
+
+    const handleSearch = (e) => {
+        e.preventDefault();
+        if (!searchQuery.trim()) return;
+
+        setAgentPrompt(searchQuery);
+        setIsAgentActive(true);
+        setIsRightPanelOpen(true); // Auto-open panel
+    };
 
     const navItems = [
         { id: 'omni', icon: Compass, label: 'Omni Search', detail: 'Explore 142 sources across journals and reports.' },
@@ -183,7 +199,7 @@ const AppShell = ({ activeTab, onTabChange, children }) => {
                         </div>
                     </div>
 
-                    <div style={{
+                    <form onSubmit={handleSearch} style={{
                         display: 'flex', alignItems: 'center', gap: '10px',
                         background: 'hsla(var(--bg-app), 0.5)',
                         padding: '8px 20px', borderRadius: 'var(--radius-full)',
@@ -192,10 +208,20 @@ const AppShell = ({ activeTab, onTabChange, children }) => {
                         cursor: 'text'
                     }}
                         onFocus={(e) => e.currentTarget.style.borderColor = 'hsl(var(--primary))'}
+                        onBlur={(e) => e.currentTarget.style.borderColor = 'hsla(var(--border-subtle))'}
                     >
                         <Search size={16} color="hsl(var(--text-muted))" />
-                        <span style={{ fontSize: '0.9rem', color: 'hsl(var(--text-muted))' }}>Search or ask agent...</span>
-                    </div>
+                        <input
+                            type="text"
+                            placeholder="Search or ask agent..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            style={{
+                                border: 'none', background: 'transparent', outline: 'none',
+                                width: '100%', fontSize: '0.9rem', color: 'hsl(var(--text-main))'
+                            }}
+                        />
+                    </form>
 
                     <div style={{ width: '80px', display: 'flex', justifyContent: 'flex-end' }}>
                         <button
@@ -230,32 +256,18 @@ const AppShell = ({ activeTab, onTabChange, children }) => {
                 flexDirection: 'column',
                 zIndex: 20
             }}>
-                <div style={{ padding: 'var(--space-lg)', borderBottom: '1px solid hsla(var(--border-subtle))', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <Sparkles size={18} color="hsl(var(--primary))" />
-                    <span style={{ fontWeight: 600, fontSize: '0.95rem' }}>Agent Assistant</span>
-                </div>
-
-                <div style={{ flex: 1, padding: 'var(--space-lg)', overflowY: 'auto' }}>
-                    <div style={{
-                        background: 'white', padding: '16px', borderRadius: 'var(--radius-md)',
-                        border: '1px solid hsla(var(--border-subtle))', marginBottom: '16px',
-                        fontSize: '0.9rem', lineHeight: '1.6', color: 'hsl(var(--text-main))',
-                        boxShadow: 'var(--shadow-sm)'
-                    }}>
-                        I'm tracking your research on "Sustainable Packaging". I've found 3 new relevant sources in the Omni Search.
-                    </div>
-
-                    {/* Mock Agent Suggestions */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                        <button className="card-surface" style={{ padding: '12px', textAlign: 'left', cursor: 'pointer' }}>
-                            <div style={{ fontSize: '0.85rem', fontWeight: 600, marginBottom: '4px' }}>Summarize Findings</div>
-                            <div style={{ fontSize: '0.8rem', color: 'hsl(var(--text-muted))' }}>Create a brief from pinned items.</div>
-                        </button>
-                        <button className="card-surface" style={{ padding: '12px', textAlign: 'left', cursor: 'pointer' }}>
-                            <div style={{ fontSize: '0.85rem', fontWeight: 600, marginBottom: '4px' }}>Compare Markets</div>
-                            <div style={{ fontSize: '0.8rem', color: 'hsl(var(--text-muted))' }}>Generate a table for EU vs APAC.</div>
-                        </button>
-                    </div>
+                <div style={{ flex: 1, padding: 'var(--space-md)', overflow: 'hidden' }}>
+                    {isAgentActive ? (
+                        <TaskSimulator prompt={agentPrompt} isActive={isAgentActive} />
+                    ) : (
+                        <div style={{
+                            height: '100%', display: 'flex', flexDirection: 'column',
+                            alignItems: 'center', justifyContent: 'center', opacity: 0.5
+                        }}>
+                            <Sparkles size={48} strokeWidth={1} />
+                            <p style={{ marginTop: '16px', fontSize: '0.9rem' }}>Agent is idle</p>
+                        </div>
+                    )}
                 </div>
             </aside>
 

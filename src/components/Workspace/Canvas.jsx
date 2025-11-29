@@ -1,78 +1,93 @@
 import React from 'react';
-import { Move, Link, MoreVertical } from 'lucide-react';
+import { MoreHorizontal, Link as LinkIcon, Edit3, Move } from 'lucide-react';
+import { useWorkflow } from '../../context/WorkflowContext';
 
-const CanvasCard = ({ title, x, y, color }) => (
-    <div className="card-surface" style={{
-        position: 'absolute',
-        left: x,
-        top: y,
-        width: '240px',
-        padding: '16px',
-        background: 'white',
-        cursor: 'grab',
-        zIndex: 1
-    }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-            <div style={{ width: '30px', height: '4px', background: color, borderRadius: '4px' }} />
-            <MoreVertical size={14} color="hsl(var(--text-muted))" />
+const CanvasCard = ({ item, x, y, onDraft }) => {
+    return (
+        <div className="frosted-glass card-surface" style={{
+            position: 'absolute',
+            left: x, top: y,
+            width: '280px',
+            padding: '16px',
+            cursor: 'grab',
+            zIndex: 10
+        }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+                <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'hsl(var(--primary))', textTransform: 'uppercase' }}>{item.type}</span>
+                <MoreHorizontal size={16} color="hsl(var(--text-muted))" />
+            </div>
+            <h4 style={{ fontSize: '0.95rem', fontWeight: 600, marginBottom: '8px', lineHeight: '1.4' }}>{item.title}</h4>
+            <p style={{ fontSize: '0.8rem', color: 'hsl(var(--text-muted))', marginBottom: '12px' }}>{item.summary}</p>
+
+            <div style={{ display: 'flex', gap: '8px' }}>
+                <button
+                    onClick={() => onDraft(item)}
+                    style={{
+                        flex: 1, padding: '6px', borderRadius: '6px', border: 'none',
+                        background: 'hsl(var(--primary))', color: 'white', fontSize: '0.8rem', fontWeight: 500,
+                        cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px'
+                    }}
+                >
+                    <Edit3 size={12} /> Draft Insight
+                </button>
+            </div>
         </div>
-        <h4 style={{ fontSize: '0.9rem', marginBottom: '8px' }}>{title}</h4>
-        <p style={{ fontSize: '0.75rem', color: 'hsl(var(--text-muted))', lineHeight: '1.4' }}>
-            Extracted snippet from the source material. This represents a key finding.
-        </p>
-    </div>
-);
+    );
+};
 
 const Canvas = () => {
+    const { pinnedItems, addToEditor } = useWorkflow();
+
+    const handleDraft = (item) => {
+        const text = `## Insight from ${item.source}\n\nBased on "${item.title}", it is crucial to note that: ${item.summary}\n\n(Source: ${item.source}, ${item.date})`;
+        addToEditor(text);
+        alert("Added to Insights Draft!");
+    };
+
     return (
         <div style={{
-            width: '100%',
-            height: '100%',
-            background: 'radial-gradient(circle, hsla(var(--text-muted), 0.1) 1px, transparent 1px)',
-            backgroundSize: '20px 20px',
+            height: '100%', width: '100%',
             position: 'relative',
-            overflow: 'hidden'
+            overflow: 'hidden',
+            backgroundSize: '40px 40px',
+            backgroundImage: 'radial-gradient(circle, hsla(var(--text-muted), 0.2) 1px, transparent 1px)'
         }}>
-            <div style={{ padding: 'var(--space-lg)', pointerEvents: 'none' }}>
-                <h1 style={{ fontSize: '1.5rem' }}>Research Canvas</h1>
-                <p style={{ color: 'hsl(var(--text-muted))' }}>Cluster and organize your findings spatially.</p>
-            </div>
-
-            {/* Mock Cluster 1 */}
+            {/* Toolbar */}
             <div style={{
-                position: 'absolute', top: '100px', left: '100px',
-                width: '550px', height: '400px',
-                border: '2px dashed hsla(var(--primary), 0.2)',
-                borderRadius: 'var(--radius-lg)',
-                background: 'hsla(var(--primary), 0.02)'
+                position: 'absolute', bottom: '32px', left: '50%', transform: 'translateX(-50%)',
+                background: 'hsla(var(--bg-surface), 0.8)', backdropFilter: 'blur(12px)',
+                padding: '8px 16px', borderRadius: 'var(--radius-full)',
+                border: '1px solid hsla(var(--border-subtle))',
+                boxShadow: 'var(--shadow-lg)',
+                display: 'flex', gap: '16px', zIndex: 50
             }}>
+                <span style={{ fontSize: '0.9rem', fontWeight: 600 }}>Canvas</span>
+                <div style={{ width: '1px', height: '20px', background: 'hsla(var(--border-subtle))' }} />
+                <span style={{ fontSize: '0.9rem', color: 'hsl(var(--text-muted))' }}>{pinnedItems.length} items pinned</span>
+                <div style={{ width: '1px', height: '20px', background: 'hsla(var(--border-subtle))' }} />
+                <button style={{ padding: '4px', border: 'none', background: 'transparent', cursor: 'pointer' }}><Move size={18} /></button>
+                <button style={{ padding: '4px', border: 'none', background: 'transparent', cursor: 'pointer' }}><LinkIcon size={18} /></button>
+            </div>
+
+            {/* Cards */}
+            {pinnedItems.map((item, index) => (
+                <CanvasCard
+                    key={item.id}
+                    item={item}
+                    x={100 + (index * 50)}
+                    y={100 + (index * 50)}
+                    onDraft={handleDraft}
+                />
+            ))}
+
+            {pinnedItems.length === 0 && (
                 <div style={{
-                    position: 'absolute', top: '-12px', left: '20px',
-                    background: 'hsl(var(--primary))', color: 'white',
-                    padding: '2px 12px', borderRadius: '12px', fontSize: '0.75rem', fontWeight: 600
+                    position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+                    color: 'hsl(var(--text-muted))', textAlign: 'center'
                 }}>
-                    Market Trends
+                    Pin items from Omni Search to organize them here.
                 </div>
-
-                <CanvasCard title="Growth in 2025" x={40} y={40} color="var(--primary)" />
-                <CanvasCard title="Consumer Shift" x={280} y={80} color="var(--secondary)" />
-                <CanvasCard title="APAC Region Analysis" x={100} y={200} color="var(--accent)" />
-
-                {/* Connection Line Mockup */}
-                <svg style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 0 }}>
-                    <path d="M 160 120 Q 220 120 280 140" stroke="hsla(var(--text-muted), 0.3)" strokeWidth="2" fill="none" strokeDasharray="4" />
-                    <path d="M 160 120 Q 160 200 220 260" stroke="hsla(var(--text-muted), 0.3)" strokeWidth="2" fill="none" strokeDasharray="4" />
-                </svg>
-            </div>
-
-            {/* Floating Controls */}
-            <div className="card-surface" style={{
-                position: 'absolute', bottom: '30px', left: '50%', transform: 'translateX(-50%)',
-                padding: '8px', display: 'flex', gap: '8px', borderRadius: 'var(--radius-full)'
-            }}>
-                <button style={{ padding: '8px', border: 'none', background: 'transparent', cursor: 'pointer' }}><Move size={18} /></button>
-                <button style={{ padding: '8px', border: 'none', background: 'transparent', cursor: 'pointer' }}><Link size={18} /></button>
-            </div>
+            )}
         </div>
     );
 };

@@ -1,76 +1,85 @@
 import React from 'react';
-import { Plus, ExternalLink, MoreHorizontal } from 'lucide-react';
+import { FileText, Video, File, MoreHorizontal, Plus } from 'lucide-react';
+import { useWorkflow } from '../../context/WorkflowContext';
+
+const ResultCard = ({ item, onPin }) => {
+    const getIcon = () => {
+        if (item.type === 'video') return <Video size={20} color="var(--color-web)" />;
+        if (item.type === 'pdf') return <File size={20} color="var(--color-file)" />;
+        return <FileText size={20} color="var(--color-code)" />;
+    };
+
+    return (
+        <div className="frosted-glass card-surface" style={{
+            padding: '16px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '12px',
+            cursor: 'pointer',
+            height: '100%'
+        }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                <div style={{
+                    padding: '8px', borderRadius: '12px',
+                    background: 'hsla(var(--bg-app), 0.5)',
+                    border: '1px solid hsla(var(--border-subtle))'
+                }}>
+                    {getIcon()}
+                </div>
+                <button style={{ border: 'none', background: 'transparent', cursor: 'pointer', color: 'hsl(var(--text-muted))' }}>
+                    <MoreHorizontal size={18} />
+                </button>
+            </div>
+
+            <div>
+                <h3 style={{ fontSize: '1rem', fontWeight: 600, marginBottom: '6px', lineHeight: '1.4' }}>{item.title}</h3>
+                <p style={{ fontSize: '0.85rem', color: 'hsl(var(--text-muted))', lineHeight: '1.5' }}>{item.summary}</p>
+            </div>
+
+            <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <span style={{ fontSize: '0.75rem', fontWeight: 500, color: 'hsl(var(--text-muted))' }}>{item.source} • {item.date}</span>
+                <button
+                    onClick={() => onPin(item)}
+                    style={{
+                        padding: '6px 12px', borderRadius: 'var(--radius-full)',
+                        border: '1px solid hsla(var(--primary), 0.3)',
+                        background: 'hsla(var(--primary), 0.1)',
+                        color: 'hsl(var(--primary))',
+                        fontSize: '0.8rem', fontWeight: 600,
+                        cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px'
+                    }}
+                >
+                    <Plus size={14} /> Pin
+                </button>
+            </div>
+        </div>
+    );
+};
 
 const OmniSearch = () => {
-    const results = [
-        { id: 1, title: 'Future of Sustainable Packaging', type: 'Article', color: 'var(--primary-soft)', size: 'large' },
-        { id: 2, title: 'Bioplastics Market Report', type: 'PDF', color: '#e0f2f1', size: 'medium' }, // Mint
-        { id: 3, title: 'Competitor Analysis 2024', type: 'Sheet', color: '#fff3e0', size: 'small' }, // Orange
-        { id: 4, title: 'Design Trends', type: 'Image', color: '#f3e5f5', size: 'medium' }, // Purple
-        { id: 5, title: 'User Interviews', type: 'Video', color: '#e8eaf6', size: 'small' }, // Indigo
-        { id: 6, title: 'Regulatory Guidelines', type: 'Doc', color: '#ffebee', size: 'large' }, // Red
-    ];
+    const { searchResults, pinItem } = useWorkflow();
 
     return (
         <div style={{ padding: 'var(--space-lg)', height: '100%', overflowY: 'auto' }}>
-            <div style={{ marginBottom: 'var(--space-lg)' }}>
-                <h1 style={{ fontSize: '1.5rem', marginBottom: '8px' }}>Omni Search</h1>
-                <p style={{ color: 'hsl(var(--text-muted))' }}>Exploring "Sustainable Packaging Solutions"</p>
-            </div>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: 'var(--space-lg)', letterSpacing: '-0.03em' }}>
+                Omni Search <span style={{ color: 'hsl(var(--text-muted))', fontWeight: 400 }}>({searchResults.length} results)</span>
+            </h2>
 
-            {/* Mosaic Grid */}
             <div style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
-                gridAutoRows: '200px',
-                gap: 'var(--space-md)'
+                gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+                gap: '20px',
+                paddingBottom: '40px'
             }}>
-                {results.map((item) => (
-                    <div key={item.id} className="card-surface" style={{
-                        gridRow: item.size === 'large' ? 'span 2' : 'span 1',
-                        background: item.color,
-                        padding: 'var(--space-md)',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'space-between',
-                        position: 'relative',
-                        cursor: 'pointer'
-                    }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                            <span style={{
-                                fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '1px',
-                                fontWeight: 600, opacity: 0.6
-                            }}>{item.type}</span>
-                            <button style={{ border: 'none', background: 'transparent', cursor: 'pointer', opacity: 0.5 }}>
-                                <MoreHorizontal size={16} />
-                            </button>
-                        </div>
-
-                        <div>
-                            <h3 style={{ fontSize: '1.1rem', marginBottom: '8px', lineHeight: '1.3' }}>{item.title}</h3>
-                            <p style={{ fontSize: '0.8rem', color: 'hsla(0,0%,0%,0.5)', lineHeight: '1.5' }}>
-                                Agent summary of the content goes here. It provides a quick glimpse into the source.
-                            </p>
-                        </div>
-
-                        <div style={{ display: 'flex', gap: '8px', marginTop: '12px' }}>
-                            <button style={{
-                                flex: 1, padding: '6px', borderRadius: 'var(--radius-full)', border: 'none',
-                                background: 'white', fontSize: '0.75rem', fontWeight: 500, cursor: 'pointer',
-                                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px',
-                                boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
-                            }}>
-                                <Plus size={12} /> Pin to Canvas
-                            </button>
-                            <button style={{
-                                padding: '6px', borderRadius: 'var(--radius-full)', border: 'none',
-                                background: 'rgba(255,255,255,0.5)', cursor: 'pointer'
-                            }}>
-                                <ExternalLink size={14} />
-                            </button>
-                        </div>
+                {searchResults.length === 0 ? (
+                    <div style={{ gridColumn: '1/-1', textAlign: 'center', color: 'hsl(var(--text-muted))', marginTop: '40px' }}>
+                        Start a search to see results from the Agent.
                     </div>
-                ))}
+                ) : (
+                    searchResults.map(item => (
+                        <ResultCard key={item.id} item={item} onPin={pinItem} />
+                    ))
+                )}
             </div>
         </div>
     );
